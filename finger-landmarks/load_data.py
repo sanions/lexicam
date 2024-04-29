@@ -78,11 +78,10 @@ def calc_bbox(img, hand_pts, target_size):
 
 def create_dataset(dir_name, target_size=(128, 128)):
 
-    # initialize df
     # go through images in dataset -- for each filename: 
 
         # get img
-        # get labels
+        # get labels json --> hand_pts
 
         # calculate bounding box for img using calc_bbox
         # crop img to bounding box
@@ -93,12 +92,27 @@ def create_dataset(dir_name, target_size=(128, 128)):
             # rescale labels based on resized scale factors
 
         # save cropped & resized image to new dir
-        # add row containing new img filename and recalculated labels to df
-    
+        # create new json with recalculated labels and save to new dir
+
     pass
 
 
-    
+def load_data(): 
+    # initialize images = []
+    # initialize labels = []
+    # for each fname in new dataset dir: 
+        
+        # get img (resized, cropped)
+        # get labels json --> hand_pts 
+
+        # parse labels json to list of landmark coords x, y
+
+        # append img to images
+        # append list of landmarks to labels
+
+    # convert images and labels to np array
+    # return images, labels
+    pass 
 
 
 if __name__ == "__main__": 
