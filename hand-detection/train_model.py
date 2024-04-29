@@ -24,8 +24,7 @@ def create_model(input_shape=(576, 720, 3)):
     return model
 
 
-if __name__ == "__main__": 
-
+def train(): 
     # create an instance of the model
     model = create_model()
 
@@ -57,4 +56,8 @@ if __name__ == "__main__":
 
     # Print test accuracy
     print('Test accuracy:', test_acc)
+
+
+if __name__ == "__main__": 
+    train()
 

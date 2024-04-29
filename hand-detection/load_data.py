@@ -45,56 +45,6 @@ def calc_basic_bbox(coordinates):
     return bounding_box
 
 
-def expand_bbox(img, bbox, target_size):
-    '''
-    Expands bounding box to the area around the hand until it reaches target_size, if possible.
-
-    REMINDER: Resulting bounding box could be too large. Use cv2.resize() or similar to fix. 
-    '''
-
-    h, w = target_size
-    tl, br = bbox
-    min_x, max_y = tl
-    max_x, min_y = br
-    cropped = img[min_y:max_y, min_x:max_x]
-
-    # resizing
-    if cropped.shape[0] < w:
-        mid_x = (min_x + max_x)/2
-        min_x, max_x = mid_x - h/2, mid_x + h/2
-    if cropped.shape[1] < h:
-        mid_y = (min_y + max_y)/2
-        min_y, max_y = mid_y - w/2, mid_y + w/2
-
-    min_x = max(0, int(min_x))
-    max_x = min(img.shape[1]-1, int(math.ceil(max_x)))
-    min_y = max(0, int(min_y))
-    max_y = min(img.shape[0]-1, int(math.ceil(max_y)))
-
-    tl = (min_x, max_y)
-    br = (max_x, min_y)
-
-    return [tl, br]
-
-
-def calc_bbox(img, hand_pts, target_size): 
-    '''
-    Calculates bounding box [bottom_left, top_right]. 
-
-    REMINDER: Resulting bounding box could be too large. Use cv2.resize() or similar to fix. 
-    '''
-    bbox = calc_basic_bbox(hand_pts)
-    return expand_bbox(img, bbox, target_size)
-
-
-def adjust_labels(bbox, hand_pts, scale_x, scale_y): 
-    '''
-    Adjusts the coordinates of labels to match the bounding box + resizing.
-    '''
-    # TODO: implement this function
-    pass
-
-
 def clean_data(dir_name, out_file, target_size=(128, 128)): 
 
     df = pd.DataFrame(columns=["img_filepath", "img_size", "bbox_tl_x", "bbox_tl_y", "bbox_br_x", "bbox_br_y"])
