@@ -13,7 +13,9 @@ if not os.path.isdir(outpath):
 
 # 1. get bounding boxes for hands
 def calc_basic_bbox(coordinates):
-    
+    '''
+    Finds the smallest possible bounding box that encloses all the given coordinates.
+    '''
     if not coordinates:
         return None
     
@@ -29,19 +31,43 @@ def calc_basic_bbox(coordinates):
     max_y = int(math.ceil(max_y))
     
     # define the corners of the bounding box
-    top_left = (min_x, max_y)
-    top_right = (max_x, max_y)
-    bottom_left = (min_x, min_y)
-    bottom_right = (max_x, min_y)
+    tl = (min_x, max_y)
+    br = (max_x, min_y)
     
-    # bounding box defined by its corners
-    bounding_box = [top_left, top_right, bottom_right, bottom_left]
+    # bounding box defined by its top-left and bottom-right corners
+    bounding_box = [tl, br]
     
     return bounding_box
 
 
-# def resize_bbox(img, bbox, target_size=(128, 128)):
+def resize_bbox(img, bbox, target_size=(128, 128)):
+    '''
+    Expand bounding box to the area around the hand until it reaches target_size, if possible.
+    '''
 
+    h, w = target_size
+    tl, br = bbox
+    min_x, max_y = tl
+    max_x, min_y = br
+    cropped = img[min_y:max_y, min_x:max_x]
+
+    # resizing
+    if cropped.shape[0] < w:
+        mid_x = (min_x + max_x)/2
+        min_x, max_x = mid_x - h/2, mid_x + h/2
+    if cropped.shape[1] < h:
+        mid_y = (min_y + max_y)/2
+        min_y, max_y = mid_y - w/2, mid_y + w/2
+
+    min_x = max(0, int(min_x))
+    max_x = min(img.shape[1]-1, int(math.ceil(max_x)))
+    min_y = max(0, int(min_y))
+    max_y = min(img.shape[0]-1, int(math.ceil(max_y)))
+
+    tl = (min_x, max_y)
+    br = (max_x, min_y)
+
+    return [tl, br]
 
 
 # load data
